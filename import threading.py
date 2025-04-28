@@ -3,7 +3,7 @@ import time
 import random
 
 class Lightswitch:
-    def _init_(self):
+    def __init__(self):
         self.count = 0
         self.mutex = threading.Lock()
 
@@ -44,6 +44,18 @@ def male_use_bathroom(id):
     maleMultiplex.release()
     maleSwitch.unlock(empty)
 
+# Kadınların tuvalete girişi
+def female_use_bathroom(id):
+    time.sleep(random.uniform(0.1, 0.5))
+    turnstile.acquire()
+    femaleSwitch.lock(empty)
+    turnstile.release()
+    femaleMultiplex.acquire()
+    print(f"Kadın {id} tuvaleti kullanıyor.")
+    time.sleep(random.uniform(0.5, 1.5))
+    print(f"Kadın {id} tuveletten çıktı.")
+    femaleMultiplex.release()
+    femaleSwitch.unlock(empty)
 
 # Thread'lerin oluşturulması ve çalıştırılması
 threads = []
@@ -64,4 +76,4 @@ for t in threads:
     t.start()
 
 for t in threads:
-    t.join()
+    t.join()
